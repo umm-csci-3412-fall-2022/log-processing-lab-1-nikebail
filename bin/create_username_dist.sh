@@ -3,8 +3,7 @@
 #iterate through all versions of failed_login_data in the subdirectories of the main directory (represented by $1)
 for file in "$1"/*/failed_login_data.txt
 do
-echo "$file"
-	awk 'match($0, /\w{3} {1,2}\S+ \w+ (\w+)/, names) {print "\047" names[1] "\047"}' < "$file" >> temp.txt
+	awk 'match($0, /\w{3} {1,2}\S+ \w+ (\S+)/, names) {print "\047" names[1] "\047"}' < "$file" >> temp.txt
 done
 
 # Sorts names for uniq
@@ -20,11 +19,10 @@ echo "$line" > super_temp_file.txt
 	awk 'match($0, /(\S+) (\S+)/, name_freq) {print "data.addRow([" name_freq[2] ", " name_freq[1] "]);"}' < super_temp_file.txt >> content.txt
 done < freq_name.txt
 
-# Wrap the data in the HTML header/footers 
+# Wrap the data in the HTML header/footers
 ./bin/wrap_contents.sh content.txt html_components/username_dist username_dist.html
 mv username_dist.html data
 
-# Clean up temp files!
 rm content.txt
 rm temp.txt
 rm sorted_temp.txt

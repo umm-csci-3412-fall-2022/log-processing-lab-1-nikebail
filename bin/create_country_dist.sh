@@ -3,7 +3,6 @@
 #iterate through all versions of failed_login_data in the subdirectories of the main directory (represented by $1)
 for file in "$1"/*/failed_login_data.txt
 do
-echo "$file"
 	awk 'match($0, /([0-9]+\..+)/, names) {print names[1]}' < "$file" >> temp.txt
 done
 
@@ -32,6 +31,10 @@ awk 'match($0, /\s+(\S+) (\S+)/, data) {print "data.addRow([" data[2] ", " data[
 mv country_dist.html data
 
 # Cleaning up any temp files
+rm country_codes_sorted.txt
+rm country_codes.txt
+rm freq_countries.txt
 rm temp.txt
 rm sorted_temp.txt
-
+rm content.txt
+rm country_ip.txt

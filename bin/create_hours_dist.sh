@@ -3,7 +3,6 @@
 #iterate through all versions of failed_login_data in the subdirectories of the main directory (represented by $1)
 for file in "$1"/*/failed_login_data.txt
 do
-echo "$file"
 	awk 'match($0, /\w \w+ (\w+)/, hours) {print "\047" hours[1] "\047"}' < "$file" >> temp.txt
 done
 

@@ -1,18 +1,23 @@
 #!/bin/bash
 currentdir=$(pwd)
 tempdir="/tmp/logs_processing_temp"
-mkdir -p -v "$tempdir"
+mkdir data
+mkdir -p "$tempdir"
 for var in "$@"
 do  
 	workingdir="$tempdir"/"${var%.*}"
-	mkdir -p -v "$workingdir"
+	mkdir -p "$workingdir"
 	tar -xf "$var" --directory "$workingdir"
 	./bin/process_client_logs.sh "$workingdir"
 done
-./bin/create_username_dist.sh "$tempdir"
-./bin/create_hours_dist.sh "$tempdir"
-./bin/create_country_dist.sh "$tempdir"
+ls "$tempdir"/log_files/zeus_secure
+processed_logs="$tempdir"/log_files
+./bin/create_username_dist.sh "$processed_logs"
+./bin/create_hours_dist.sh "$processed_logs"
+./bin/create_country_dist.sh "$processed_logs"
 
-./bin/assemble_report.sh "$tempdir"
+./bin/assemble_report.sh "$currentdir"/data
 
-mv failed_login_summary.html "$currentdir" 
+mv data/failed_login_summary.html "$currentdir"
+
+rm -rf "$tempdir"
